@@ -3,7 +3,7 @@ pipeline {
     environment {
         PROJECT_ID = 'devopssre-346918'
         CLUSTER_NAME = 'autopilot-cluster-1'
-        LOCATION = 'us-central1'
+        LOCATION = 'northamerica-northeast2-a'
         CREDENTIALS_ID = 'Project_2_DevOpsSre'
     }
     stages {
