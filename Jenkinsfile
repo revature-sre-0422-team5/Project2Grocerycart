@@ -1,11 +1,11 @@
 pipeline {
     agent any
-    environment {
+  /*  environment {
         PROJECT_ID = 'devops-sre-rosh'
         CLUSTER_NAME = 'autopilot-cluster-1'
         LOCATION = 'us-central1'
         CREDENTIALS_ID = 'Project_2_DevOpsSre'
-    }
+    }*/
     stages {
         stage('Begin Pipeline') {
             steps {
