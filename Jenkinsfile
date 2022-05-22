@@ -40,13 +40,13 @@ pipeline {
         stage ('Deploy to GKE'){
             steps{
                 echo "Deploying to GKE"
-                step([$class: 'KubernetesEngineBuilder',
+              /*  step([$class: 'KubernetesEngineBuilder',
                     projectId: env.PROJECT_ID,/*'devops-javasre',*/
                     clusterName: env.CLUSTER_NAME,
                     location: env.LOCATION,
                     manifestPattern: 'deployment.yaml',
                     credentialsId: env.CREDENTIALS_ID,
-                    verifyDeployments: true])
+                    verifyDeployments: true])*/
             }
         }
     }
