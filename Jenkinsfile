@@ -1,11 +1,11 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'project-id'
-        CLUSTER_NAME = 'cluster-name'
-        CLUSTER_LOCATION = 'northamerica-northeast2'
+        PROJECT_ID = 'devops-sre-rosh'
+        CLUSTER_NAME = 'autopilot-cluster-1'
+        CLUSTER_LOCATION = 'us-central1'
         REGISTRY_LOCATION = 'northamerica-northeast2'
-        REPOSITORY = 'repository-name'
+        REPOSITORY = 'Project2Jenkins'
         CREDENTIALS_ID = 'credentials-id'
     }
     stages {
