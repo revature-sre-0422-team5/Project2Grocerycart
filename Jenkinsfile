@@ -6,7 +6,7 @@ pipeline {
         CLUSTER_LOCATION = 'us-central1'
         REGISTRY_LOCATION = 'northamerica-northeast2'
         REPOSITORY = 'project2'
-        CREDENTIALS_ID = 'b75e1aba126f43673dc0e0d79ed5e596ec307c1d'
+        CREDENTIALS_ID = 'devops-sre-rosh'
     }
     stages {
         stage ('Docker Build'){
