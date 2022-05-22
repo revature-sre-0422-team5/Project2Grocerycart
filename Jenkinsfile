@@ -5,8 +5,8 @@ pipeline {
         CLUSTER_NAME = 'autopilot-cluster-1'
         CLUSTER_LOCATION = 'us-central1'
         REGISTRY_LOCATION = 'northamerica-northeast2'
-        REPOSITORY = 'Project2Jenkins'
-        CREDENTIALS_ID = 'credentials-id'
+        REPOSITORY = 'project2'
+        //CREDENTIALS_ID = 'credentials-id'
     }
     stages {
         stage ('Docker Build'){
@@ -24,27 +24,27 @@ pipeline {
             steps {
                 script {
                     echo "Docker push"
-                    sh "docker tag directionsapi ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/directionsapi"
-                    sh "docker tag deliveryapi ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/deliveryapi"
-                    sh "docker tag notificationapi ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/notificationapi"
-                    sh "docker push ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/directionsapi"
-                    sh "docker push ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/deliveryapi"
-                    sh "docker push ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/notificationapi"
+                    sh "docker tag directionsapi northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/directionsapi"
+                    sh "docker tag deliveryapi northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/deliveryapi"
+                    sh "docker tag notificationapi northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/notificationapi"
+                    sh "docker push northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/directionsapi"
+                    sh "docker push northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/deliveryapi"
+                    sh "docker push northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/notificationapi"
                 }
             }
         }
         stage ('Deploy to GKE'){
             steps{
                 echo "Deploying to GKE"
-                sh "sed -i 's|image: directionsapi|image: ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/directionsapi|g' deployment/directionsapi-deployment.yml"
-                sh "sed -i 's|image: deliveryapi|image: ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/deliveryapi|g' deployment/deliveryapi-deployment.yml"
-                sh "sed -i 's|image: notificationapi|image: ${REGISTRY_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/notificationapi|g' deployment/notificationapi-deployment.yml"
+                sh "sed -i 's|image: directionsapi|image: northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/directionsapi|g' deployment/directionsapi-deployment.yml"
+                sh "sed -i 's|image: deliveryapi|image: northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/deliveryapi|g' deployment/deliveryapi-deployment.yml"
+                sh "sed -i 's|image: notificationapi|image: northamerica-northeast2-docker.pkg.dev/devops-sre-rosh/project2/notificationapi|g' deployment/notificationapi-deployment.yml"
                 step([$class: 'KubernetesEngineBuilder',
                     projectId: env.PROJECT_ID,
                     clusterName: env.CLUSTER_NAME,
                     location: env.CLUSTER_LOCATION,
                     manifestPattern: 'deployment',
-                    credentialsId: env.CREDENTIALS_ID,
+                    //credentialsId: env.CREDENTIALS_ID,
                     verifyDeployments: true])
             }
         }
