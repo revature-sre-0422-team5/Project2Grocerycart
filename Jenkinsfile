@@ -6,7 +6,7 @@ pipeline {
         CLUSTER_LOCATION = 'us-central1'
         REGISTRY_LOCATION = 'northamerica-northeast2'
         REPOSITORY = 'project2'
-        //CREDENTIALS_ID = 'credentials-id'
+        CREDENTIALS_ID = 'b75e1aba126f43673dc0e0d79ed5e596ec307c1d'
     }
     stages {
         stage ('Docker Build'){
@@ -44,7 +44,7 @@ pipeline {
                     clusterName: env.CLUSTER_NAME,
                     location: env.CLUSTER_LOCATION,
                     manifestPattern: 'deployment',
-                    //credentialsId: env.CREDENTIALS_ID,
+                    credentialsId: env.CREDENTIALS_ID,
                     verifyDeployments: true])
             }
         }
