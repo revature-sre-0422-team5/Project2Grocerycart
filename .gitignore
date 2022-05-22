@@ -3,12 +3,3 @@
 .idea
 .vscode
 
-deliveryApi/target
-
-api2/target
-
-terraform/
-Jenkinsfile
-deployment
-kubernetes/
-kubernetes/secrets.yaml
