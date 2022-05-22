@@ -1,85 +1,53 @@
 pipeline {
-  environment {
-    registry = 'Roshney123/Project2Jenkins'
-    dockerHubCreds = 'docker_hub'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Quality Gate') {
-        steps{
-            echo 'Quality Gate'
-        }
+    agent any
+    environment {
+        PROJECT_ID = 'devops-sre-rosh'
+        CLUSTER_NAME = 'autopilot-cluster-1'
+        LOCATION = 'us-central1'
+        CREDENTIALS_ID = 'Project_2_DevOpsSre'
     }
-    stage('Unit Testing') {
-       
-        steps{
-            withMaven {
-                sh 'mvn test'
-            }
-
-            
-        }
-    }
-    stage('Build') {
-        when {
-            branch 'main'
-        }
-        steps{
-            withMaven {
-                sh 'mvn package -DskipTests'
+    stages {
+        stage('Begin Pipeline') {
+            steps {
+                sh 'echo "Hello world"'
             }
         }
-    }
-    stage('Docker Image') {
-        when {
-            branch 'main'
-        }
-        steps{
-            script {
-                echo "$registry:$currentBuild.number"
-                dockerImage = docker.build "$registry:$currentBuild.number"
-            }
-        }
-    }
-    stage('Docker Deliver') {
-        when {
-            branch 'main'
-        }
-        steps{
-            script {
-                docker.withRegistry("", dockerHubCreds) {
-                    dockerImage.push("$currentBuild.number")
-                    dockerImage.push("latest")
+        stage ('Docker Build'){
+            steps {
+                script {
+                    echo "Docker Build"
+                    sh "docker build -t notificationapi notificationApi"
+                    // sh "docker build -t deliveryapi deliveryApi"
+                    // sh "docker pull mysql"
                 }
             }
         }
-    }
-    stage('Wait for approval') {
-        when {
-            branch 'main'
-        }
-        steps {
-            script {
-            try {
-                timeout(time: 1, unit: 'MINUTES') {
-                    approved = input message: 'Deploy to production?', ok: 'Continue',
-                        parameters: [choice(name: 'approved', choices: 'Yes\nNo', description: 'Deploy build to production')]
-
-                    if(approved != 'Yes') {
-                        error('Build did not pass approval')
-                    }
+        stage ('Docker tag and push to Google Artifact Repository'){
+            steps {
+                script {
+                    echo "Docker push"
+                    
+                 //  sh "docker tag deliveryapi northamerica-northeast2-docker.pkg.dev/revature-346918/gcp-docker/deliveryapi"
+                  //  sh "docker push northamerica-northeast2-docker.pkg.dev/revature-346918/gcp-docker/deliveryapi"
+                   // sh "docker tag notificationapi northamerica-northeast2-docker.pkg.dev/revature-346918/gcp-docker/notificationapi"
+                   // sh "docker push northamerica-northeast2-docker.pkg.dev/revature-346918/gcp-docker/notificationapi"
+                  //  sh "docker tag mysql northamerica-northeast2-docker.pkg.dev/revature-346918/gcp-docker/mysql"
+                   // sh "docker push northamerica-northeast2-docker.pkg.dev/revature-346918/gcp-docker/mysql"
+                    
                 }
-            } catch(error) {
-                error('Build failed because timeout was exceeded');
             }
         }
+        stage ('Deploy to GKE'){
+            steps{
+                echo "Deploying to GKE"
+             /*   step([$class: 'KubernetesEngineBuilder',
+                    projectId: env.PROJECT_ID,/*'devops-javasre',*/
+                    clusterName: env.CLUSTER_NAME,
+                    location: env.LOCATION,
+                    manifestPattern: 'deployment.yaml',
+                    credentialsId: env.CREDENTIALS_ID,
+                    verifyDeployments: true])*/
+            }
         }
     }
-    stage('Deploy'){
-        steps{
-            echo 'Deploy'
-        }
-    }
-  }
 }
